@@ -68,3 +68,5 @@ router.post('/', requireUser, validateTweetInput, async (req, res, next) => {
         next(err);
     }
 });
+
+module.exports = router;
