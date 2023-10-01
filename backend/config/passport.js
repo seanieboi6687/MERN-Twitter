@@ -3,6 +3,8 @@ const LocalStrategy = require('passport-local');
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
+const jwt = require('jsonwebtoken');
+const { secretOrKey } = require('./keys');
 
 passport.use(new LocalStrategy({
     session: false,
