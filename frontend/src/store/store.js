@@ -5,6 +5,13 @@ import App from './App';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import configureStore from './store/store';
+import session from './session';
+import tweetsReducer from './tweets';
+
+const rootReducer = combineReducers({
+    session,
+    tweetsReducer
+});
 
 let store = configureStore({});
 
