@@ -1,7 +1,9 @@
+require('dotenv').config();
+
 const mongoose = require("mongoose");
 const { mongoURI: db } = require('../config/keys.js');
-const User = require('../models/User');
-const Tweet = require('../models/Tweet');
+const User = require('../models/User.js');
+const Tweet = require('../models/Tweet.js');
 const bcrypt = require('bcryptjs');
 const { faker } = require('@faker-js/faker');
 
@@ -41,4 +43,33 @@ for (let i = 0; i < NUM_SEED_TWEETS; i++) {
             author: users[Math.floor(Math.random() * NUM_SEED_USERS)]._id
         })
     )
+}
+
+// Connect to database
+mongoose
+    .connect(db, { useNewUrlParser: true })
+    .then(() => {
+        console.log('Connected to MongoDB successfully');
+        insertSeeds();
+    })
+    .catch(err => {
+        console.error(err.stack);
+        process.exit(1);
+    });
+
+const insertSeeds = () => {
+    console.log("Resetting db and seeding users and tweets...");
+
+    User.collection.drop()
+    .then(() => Tweet.collection.drop())
+    .then(() => User.insertMany(users))
+    .then(() => Tweet.insertMany(tweets))
+    .then(() => {
+        console.log("Done!");
+        mongoose.disconnect();
+    })
+    .catch(err => {
+        console.error(err.stack);
+        process.exit(1);
+    });
 }
